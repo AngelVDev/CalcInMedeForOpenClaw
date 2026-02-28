@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MIM MVP Calculator</title>
+    <link rel="icon" type="image/svg+xml" href="assets/app-icon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="window98 app">
+      <header class="title-bar">
+        <div class="title-left">
+          <img src="assets/app-icon.svg" alt="App icon" class="app-icon" />
+          <span>MIM MVP Calculator</span>
+        </div>
+        <div class="title-actions" aria-hidden="true">
+          <button>_</button><button>□</button><button>×</button>
+        </div>
+      </header>
+
+      <section class="screen" id="tab-home">
+        <h1>Funny MIM Score</h1>
+        <p class="hint">Upload a PNG and get a score from <strong>0 to 100</strong>.</p>
+
+        <label class="upload-area" for="memeInput">
+          <input id="memeInput" type="file" accept="image/png" />
+          <span>Choose PNG meme</span>
+          <small id="fileName">No file selected</small>
+        </label>
+
+        <button id="scoreBtn" class="win98-btn primary">Calculate funny score</button>
+
+        <div class="score-card" role="status" aria-live="polite">
+          <p id="scoreValue">Score: --</p>
+          <p id="scoreMood">Waiting for meme...</p>
+        </div>
+
+        <div class="meme-gallery" id="memeGallery" aria-label="Loaded memes"></div>
+      </section>
+
+      <section class="screen hidden" id="tab-discover">
+        <h2>Discover</h2>
+        <p>Try the classic <strong>Konami code</strong>:</p>
+        <p class="code">↑ ↑ ↓ ↓ ← → ← → B A</p>
+        <p id="konamiStatus">Waiting for secret code...</p>
+      </section>
+
+      <section class="screen hidden" id="tab-upload">
+        <h2>Upload My MIM</h2>
+        <p>This is a mock flow for MVP. Backend integration comes later.</p>
+        <ul>
+          <li>✅ PNG-only upload support</li>
+          <li>✅ Local preview list</li>
+          <li>🕒 Cloud storage pending</li>
+        </ul>
+      </section>
+
+      <section class="screen hidden" id="tab-profile">
+        <h2>Profile (Mock)</h2>
+        <p>UI-only settings for now.</p>
+        <button class="win98-btn">Edit avatar</button>
+        <button class="win98-btn">Change nickname</button>
+      </section>
+
+      <nav class="tab-bar" aria-label="Bottom navigation">
+        <button class="tab-btn active" data-tab="home">Home</button>
+        <button class="tab-btn" data-tab="discover">Discover</button>
+        <button class="tab-btn" data-tab="upload">Upload My MIM</button>
+        <button class="tab-btn" data-tab="profile">Profile</button>
+      </nav>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
