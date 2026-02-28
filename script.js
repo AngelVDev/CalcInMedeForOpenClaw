@@ -1,152 +1,101 @@
-const display = document.getElementById('display');
-const memeFeed = document.getElementById('memeFeed');
-const keys = document.getElementById('keys');
-const soundEnabled = document.getElementById('soundEnabled');
+const memeInput = document.getElementById('memeInput');
+const fileName = document.getElementById('fileName');
+const scoreBtn = document.getElementById('scoreBtn');
+const scoreValue = document.getElementById('scoreValue');
+const scoreMood = document.getElementById('scoreMood');
+const memeGallery = document.getElementById('memeGallery');
+const konamiStatus = document.getElementById('konamiStatus');
 
-const memeMap = {
-  0: '0️⃣ Zero chill mode.',
-  1: '1️⃣ One brain cell, max focus.',
-  2: '2️⃣ Double trouble 😈',
-  3: '3️⃣ Third time is the meme.',
-  4: '4️⃣ Fantastic four-function energy.',
-  5: '5️⃣ High five! ✋',
-  6: '6️⃣ Beast mode activated 💪',
-  7: '7️⃣ Lucky hit 🍀',
-  8: '8️⃣ Infinite-ish vibes ♾️',
-  9: '9️⃣ Cloud nine calculator.'
+const tabs = document.querySelectorAll('.tab-btn');
+const screens = {
+  home: document.getElementById('tab-home'),
+  discover: document.getElementById('tab-discover'),
+  upload: document.getElementById('tab-upload'),
+  profile: document.getElementById('tab-profile')
 };
 
-let current = '0';
-let previous = null;
-let operator = null;
-let resetOnNextNumber = false;
+let currentFile = null;
+const loadedMemes = [];
 
-function setDisplay(text) {
-  display.textContent = text;
+function showTab(tabName) {
+  Object.entries(screens).forEach(([name, el]) => {
+    el.classList.toggle('hidden', name !== tabName);
+  });
+  tabs.forEach((btn) => btn.classList.toggle('active', btn.dataset.tab === tabName));
 }
 
-function updateMeme(numberPressed) {
-  memeFeed.textContent = memeMap[numberPressed] ?? 'No meme found.';
-}
+tabs.forEach((btn) => {
+  btn.addEventListener('click', () => showTab(btn.dataset.tab));
+});
 
-function beep(freq = 440, duration = 80) {
-  if (!soundEnabled.checked) return;
-  const AudioCtx = window.AudioContext || window.webkitAudioContext;
-  if (!AudioCtx) return;
+memeInput.addEventListener('change', (e) => {
+  const file = e.target.files?.[0] ?? null;
+  currentFile = file;
 
-  const ctx = new AudioCtx();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-
-  osc.type = 'square';
-  osc.frequency.value = freq;
-  gain.gain.value = 0.05;
-
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-
-  osc.start();
-  setTimeout(() => {
-    osc.stop();
-    ctx.close();
-  }, duration);
-}
-
-function compute(a, b, op) {
-  const left = Number(a);
-  const right = Number(b);
-
-  switch (op) {
-    case '+':
-      return left + right;
-    case '-':
-      return left - right;
-    case '*':
-      return left * right;
-    case '/':
-      return right === 0 ? 'Error' : left / right;
-    default:
-      return right;
-  }
-}
-
-function inputNumber(value) {
-  if (resetOnNextNumber) {
-    current = value;
-    resetOnNextNumber = false;
-  } else {
-    current = current === '0' ? value : current + value;
+  if (!file) {
+    fileName.textContent = 'No file selected';
+    return;
   }
 
-  updateMeme(Number(value));
-  beep(280 + Number(value) * 50);
-  setDisplay(current);
-}
-
-function inputDecimal() {
-  if (resetOnNextNumber) {
-    current = '0.';
-    resetOnNextNumber = false;
-  } else if (!current.includes('.')) {
-    current += '.';
+  if (file.type !== 'image/png') {
+    fileName.textContent = 'Only PNG is allowed for MVP.';
+    currentFile = null;
+    memeInput.value = '';
+    return;
   }
 
-  setDisplay(current);
+  fileName.textContent = `${file.name} (${Math.round(file.size / 1024)} KB)`;
+
+  const url = URL.createObjectURL(file);
+  loadedMemes.push(url);
+  renderGallery();
+});
+
+function renderGallery() {
+  memeGallery.innerHTML = '';
+  loadedMemes.forEach((src) => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = 'Loaded meme';
+    img.className = 'meme-thumb';
+    memeGallery.appendChild(img);
+  });
 }
 
-function clearAll() {
-  current = '0';
-  previous = null;
-  operator = null;
-  resetOnNextNumber = false;
-  memeFeed.textContent = 'Calculator reset. Meme engine standing by.';
-  beep(220, 100);
-  setDisplay(current);
+function getFunnyMood(score) {
+  if (score >= 85) return 'Certified banger 😂';
+  if (score >= 60) return 'Pretty funny 😄';
+  if (score >= 30) return 'Mild chuckle 🙂';
+  return 'Dry meme territory 🫠';
 }
 
-function removeLast() {
-  if (resetOnNextNumber) return;
-  current = current.length > 1 ? current.slice(0, -1) : '0';
-  setDisplay(current);
-}
-
-function chooseOperator(nextOperator) {
-  if (operator && !resetOnNextNumber) {
-    const result = compute(previous, current, operator);
-    current = String(result);
-    setDisplay(current);
+scoreBtn.addEventListener('click', () => {
+  if (!currentFile) {
+    scoreValue.textContent = 'Score: --';
+    scoreMood.textContent = 'Upload a PNG meme first.';
+    return;
   }
 
-  previous = current;
-  operator = nextOperator;
-  resetOnNextNumber = true;
-  beep(620, 70);
-}
+  const seed = currentFile.name.length + currentFile.size;
+  const score = seed % 101;
+  scoreValue.textContent = `Score: ${score}/100`;
+  scoreMood.textContent = getFunnyMood(score);
+});
 
-function evaluate() {
-  if (!operator || previous === null) return;
-  const result = compute(previous, current, operator);
-  current = String(result);
-  previous = null;
-  operator = null;
-  resetOnNextNumber = true;
+const konamiPattern = [
+  'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+  'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+  'b', 'a'
+];
+let konamiBuffer = [];
 
-  setDisplay(current);
-  memeFeed.textContent = `Result: ${current} ✅`;
-  beep(780, 120);
-}
+window.addEventListener('keydown', (e) => {
+  const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+  konamiBuffer.push(key);
+  if (konamiBuffer.length > konamiPattern.length) konamiBuffer.shift();
 
-keys.addEventListener('click', (event) => {
-  const button = event.target.closest('button');
-  if (!button) return;
-
-  const action = button.dataset.action;
-  const value = button.dataset.value;
-
-  if (action === 'number') return inputNumber(value);
-  if (action === 'decimal') return inputDecimal();
-  if (action === 'clear') return clearAll();
-  if (action === 'backspace') return removeLast();
-  if (action === 'operator') return chooseOperator(value);
-  if (action === 'equals') return evaluate();
+  if (konamiPattern.every((k, i) => konamiBuffer[i] === k)) {
+    konamiStatus.textContent = 'Konami unlocked! Meme spin mode active.';
+    document.querySelectorAll('.meme-thumb').forEach((img) => img.classList.add('spin'));
+  }
 });

@@ -1,125 +1,132 @@
 :root {
-  --bg: #0f1221;
-  --panel: #1a1f38;
-  --panel-2: #262d4a;
-  --text: #ecf0ff;
-  --accent: #7f8bff;
-  --accent-2: #4ce0b3;
-  --danger: #ff7b7b;
+  --win-blue: #000080;
+  --win-cyan: #0aa3ff;
+  --win-bg: #008080;
+  --panel: #c0c0c0;
+  --border-dark: #404040;
+  --border-light: #ffffff;
+  --text: #000;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  background: radial-gradient(circle at top, #20284f, var(--bg));
-  color: var(--text);
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 1rem;
-}
-
-.app {
-  width: min(900px, 100%);
-  display: grid;
-  gap: 1rem;
-}
-
-h1,
-h2,
-p {
-  margin: 0;
-}
-
-.subtitle {
-  opacity: 0.8;
-}
-
-.calculator {
-  background: var(--panel);
-  border: 1px solid #3f4a79;
-  border-radius: 18px;
-  padding: 1rem;
-}
-
-.display {
-  background: #0b0e1c;
-  border-radius: 12px;
-  border: 1px solid #333d67;
-  min-height: 68px;
-  padding: 0.8rem 1rem;
-  font-size: 2rem;
-  text-align: right;
-  margin-bottom: 0.9rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.keys {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.6rem;
-}
-
-.key {
-  border: 0;
-  border-radius: 12px;
-  min-height: 52px;
-  font-size: 1.15rem;
+  padding: 16px;
+  background: linear-gradient(180deg, #0b5d9a, var(--win-bg));
+  font-family: "MS Sans Serif", Tahoma, Verdana, sans-serif;
   color: var(--text);
-  background: var(--panel-2);
+}
+
+.window98 {
+  width: min(860px, 100%);
+  background: var(--panel);
+  border: 2px solid var(--border-dark);
+  box-shadow: inset -2px -2px 0 #808080, inset 2px 2px 0 var(--border-light);
+}
+
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, var(--win-blue), var(--win-cyan));
+  color: #fff;
+  padding: 8px;
+}
+
+.title-left { display: flex; gap: 8px; align-items: center; font-weight: bold; }
+.app-icon { width: 20px; height: 20px; image-rendering: pixelated; }
+.title-actions button { margin-left: 4px; width: 24px; }
+
+.screen {
+  padding: 16px;
+  min-height: 360px;
+}
+
+.hidden { display: none; }
+
+.hint { margin-top: 0; }
+
+.upload-area {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.upload-area input {
+  background: #fff;
+  padding: 8px;
+  border: 2px inset #d8d8d8;
+}
+
+.score-card {
+  margin-top: 12px;
+  background: #fff;
+  border: 2px inset #d8d8d8;
+  padding: 12px;
+}
+
+.win98-btn {
+  border: 2px outset #d8d8d8;
+  background: #c0c0c0;
+  padding: 6px 10px;
+  margin-right: 8px;
   cursor: pointer;
 }
 
-.key:hover {
-  filter: brightness(1.12);
+.win98-btn:active { border-style: inset; }
+.primary { font-weight: bold; }
+
+.tab-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 2px solid #808080;
 }
 
-.key:active {
-  transform: translateY(1px);
+.tab-btn {
+  border: 2px outset #d8d8d8;
+  background: #c0c0c0;
+  padding: 12px 6px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.key-op {
-  background: #35417a;
+.tab-btn.active {
+  border-style: inset;
+  background: #dcdcdc;
 }
 
-.key-fn {
-  background: #4a355f;
+.code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: #fff;
+  border: 2px inset #d8d8d8;
+  display: inline-block;
+  padding: 8px;
 }
 
-.key-eq {
-  background: #1f7a62;
-  grid-row: span 2;
+.meme-gallery {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.key-zero {
-  grid-column: span 2;
+.meme-thumb {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border: 2px outset #d8d8d8;
 }
 
-.meme-panel {
-  background: var(--panel);
-  border: 1px solid #3f4a79;
-  border-radius: 18px;
-  padding: 1rem;
+.spin {
+  animation: spin 1s linear infinite;
 }
 
-.meme-feed {
-  margin-top: 0.7rem;
-  min-height: 70px;
-  background: #0b0e1c;
-  border: 1px solid #333d67;
-  border-radius: 12px;
-  padding: 0.8rem;
-  font-size: 1.1rem;
-}
-
-.sound-toggle {
-  display: inline-flex;
-  gap: 0.5rem;
-  margin-top: 0.8rem;
-  align-items: center;
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
