@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meme Calculator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1>🧮 Meme Calculator</h1>
+      <p class="subtitle">Baseline: normal operations + meme output on number taps</p>
+
+      <section class="calculator" aria-label="Calculator">
+        <div id="display" class="display" role="status" aria-live="polite">0</div>
+
+        <div class="keys" id="keys">
+          <button data-action="clear" class="key key-fn">C</button>
+          <button data-action="backspace" class="key key-fn">⌫</button>
+          <button data-action="operator" data-value="/" class="key key-op">÷</button>
+          <button data-action="operator" data-value="*" class="key key-op">×</button>
+
+          <button data-action="number" data-value="7" class="key">7</button>
+          <button data-action="number" data-value="8" class="key">8</button>
+          <button data-action="number" data-value="9" class="key">9</button>
+          <button data-action="operator" data-value="-" class="key key-op">−</button>
+
+          <button data-action="number" data-value="4" class="key">4</button>
+          <button data-action="number" data-value="5" class="key">5</button>
+          <button data-action="number" data-value="6" class="key">6</button>
+          <button data-action="operator" data-value="+" class="key key-op">+</button>
+
+          <button data-action="number" data-value="1" class="key">1</button>
+          <button data-action="number" data-value="2" class="key">2</button>
+          <button data-action="number" data-value="3" class="key">3</button>
+          <button data-action="equals" class="key key-eq" rowspan="2">=</button>
+
+          <button data-action="number" data-value="0" class="key key-zero">0</button>
+          <button data-action="decimal" class="key">.</button>
+        </div>
+      </section>
+
+      <section class="meme-panel" aria-label="Meme output">
+        <h2>Meme feed</h2>
+        <div id="memeFeed" class="meme-feed">Press a number to trigger meme mode…</div>
+        <label class="sound-toggle">
+          <input id="soundEnabled" type="checkbox" checked />
+          Sound effects enabled
+        </label>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
